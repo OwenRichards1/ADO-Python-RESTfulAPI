@@ -1,0 +1,42 @@
+[
+    {
+        "title": "Quickstart: Sign in users in web apps using the auth code flow - Microsoft Entra",
+        "description": "https://learn.microsoft.com/en-us/azure/active-directory/develop/web-app-quickstart"
+    },
+    {
+        "title": "Microsoft Enterprise SSO plug-in for Apple devices - Microsoft Entra",
+        "description": "https://learn.microsoft.com/en-us/azure/active-directory/develop/apple-sso-plugin"
+    },
+    {
+        "title": "Tutorial: Create a JavaScript single-page app that uses auth code flow - Microsoft Entra",
+        "description": "https://learn.microsoft.com/en-us/azure/active-directory/develop/tutorial-v2-javascript-auth-code"
+    },
+    {
+        "title": "Single sign-on (MSAL.js) - Microsoft Entra",
+        "description": "https://learn.microsoft.com/en-us/azure/active-directory/develop/msal-js-sso"
+    },
+    {
+        "title": "Token cache serialization (MSAL.NET) - Microsoft Entra",
+        "description": "https://learn.microsoft.com/en-us/azure/active-directory/develop/msal-net-token-cache-serialization"
+    },
+    {
+        "title": "Public and confidential client apps (MSAL) - Microsoft Entra",
+        "description": "https://learn.microsoft.com/en-us/azure/active-directory/develop/msal-client-applications"
+    },
+    {
+        "title": "Initialize MSAL.js client apps - Microsoft Entra",
+        "description": "https://learn.microsoft.com/en-us/azure/active-directory/develop/msal-js-initializing-client-applications"
+    },
+    {
+        "title": "Write a web app that signs in/out users - Microsoft Entra",
+        "description": "https://learn.microsoft.com/en-us/azure/active-directory/develop/scenario-web-app-sign-user-sign-in"
+    },
+    {
+        "title": "Tutorial: Create an Android app that uses the Microsoft identity platform for authentication - Microsoft Entra",
+        "description": "https://learn.microsoft.com/en-us/azure/active-directory/develop/tutorial-v2-android"
+    },
+    {
+        "title": "Acquire a token from the cache (MSAL.NET) - Microsoft Entra",
+        "description": "https://learn.microsoft.com/en-us/azure/active-directory/develop/msal-net-acquire-token-silently"
+    }
+]

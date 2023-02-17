@@ -1,0 +1,13 @@
+TITLE,DESCRIPTION
+Quickstart: Sign in users in web apps using the auth code flow - Microsoft Entra,https://learn.microsoft.com/en-us/azure/active-directory/develop/web-app-quickstart
+Microsoft Enterprise SSO plug-in for Apple devices - Microsoft Entra,https://learn.microsoft.com/en-us/azure/active-directory/develop/apple-sso-plugin
+Tutorial: Create a JavaScript single-page app that uses auth code flow - Microsoft Entra,https://learn.microsoft.com/en-us/azure/active-directory/develop/tutorial-v2-javascript-auth-code
+Single sign-on (MSAL.js) - Microsoft Entra,https://learn.microsoft.com/en-us/azure/active-directory/develop/msal-js-sso
+Token cache serialization (MSAL.NET) - Microsoft Entra,https://learn.microsoft.com/en-us/azure/active-directory/develop/msal-net-token-cache-serialization
+Public and confidential client apps (MSAL) - Microsoft Entra,https://learn.microsoft.com/en-us/azure/active-directory/develop/msal-client-applications
+Initialize MSAL.js client apps - Microsoft Entra,https://learn.microsoft.com/en-us/azure/active-directory/develop/msal-js-initializing-client-applications
+Write a web app that signs in/out users - Microsoft Entra,https://learn.microsoft.com/en-us/azure/active-directory/develop/scenario-web-app-sign-user-sign-in
+Tutorial: Create an Android app that uses the Microsoft identity platform for authentication - Microsoft Entra,https://learn.microsoft.com/en-us/azure/active-directory/develop/tutorial-v2-android
+Acquire a token from the cache (MSAL.NET) - Microsoft Entra,https://learn.microsoft.com/en-us/azure/active-directory/develop/msal-net-acquire-token-silently
+Microsoft Graph API - Microsoft Entra,https://learn.microsoft.com/en-us/azure/active-directory/develop/microsoft-graph-intro
+Quickstart: Add sign-in with Microsoft Identity to an ASP.NET Core web app - Microsoft Entra,https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-v2-aspnet-core-webapp
