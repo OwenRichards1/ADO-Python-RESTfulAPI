@@ -1,11 +1,9 @@
 <!-- DESCRIPTION - Can I get ChatGPT to help me create new Work Items using code? -->
 
-owenrichards@microsoft.com:
 Do you know anything about Azure Dev Ops?
 
 Yes, I'm familiar with Azure DevOps. Azure DevOps is a collection of development tools, services, and features that enable teams to plan, develop, deliver, and maintain software more efficiently. It provides a set of cloud-based collaboration tools, including Azure Boards, Azure Repos, Azure Pipelines, Azure Test Plans, and Azure Artifacts, to help teams plan, track, and discuss work across the whole development process. Azure DevOps is designed to support the entire development process, from idea to deployment. It can be used with a wide range of programming languages, platforms, and tools, and it integrates with a variety of third-party services.
 
-owenrichards@microsoft.com:
 Do you know how I can create Work Items using code?
 
 Yes, you can use the Azure DevOps REST API to create work items programmatically. The API is a set of RESTful services that allow you to create, read, update, and delete work items, as well as manage and track work item history and relations.
