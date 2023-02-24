@@ -1,132 +1,176 @@
 import requests
+import csv
 import json
 import os
-from dotenv import load_dotenv
 import base64
-
-# CONFIGURATION SECTION:
+from dotenv import load_dotenv
 
 # LOAD .ENV FILE
 load_dotenv()
+# print("Tags array loaded.")
+
 # AUTHENTICATION - LOAD FROM .ENV FILE
 organization_url = os.environ['ORGANIZATION_URL']
-# PERSONAL ACCESS TOKEN - LOAD FROM .ENV FILE
 personal_access_token = os.environ['PERSONAL_ACCESS_TOKEN']
-# USER NAME - LOAD FROM .ENV FILE
 user_name = os.environ['USER_NAME']
-# PROJECT
 project = os.environ['PROJECT']
-# COMBINED_USER_NAME
 token_user_name = user_name + ':' + personal_access_token
-# ENCODING - UFT - 8
 b64_token_user_name = base64.b64encode(token_user_name.encode()).decode()
+# print("Authentication information loaded.")
 
-# WORK ITEM
-type = 'task'
-# URL
-url = f'{organization_url}/{project}/_apis/wit/workitems/${type}?api-version=6.0'
-# print(url)
+# WI TEMPLATE ITEMS - USING ENV VARIABLES
+titleTemplate = os.environ['TITLE_TEMPLATE']
+descriptionTemplate = os.environ['DESCRIPTION_TEMPLATE']
+descriptionTemplate2 = os.environ['DESCRIPTION_TEMPLATE2']
+areaPathTemplate = os.environ['AREA_PATH_TEMPLATE']
+iterationPathTemplate = os.environ['ITERATION_PATH_TEMPLATE']
+userTemplate = os.environ['USER_TEMPLATE']
+typeTemplate = os.environ['WORK_ITEM_TYPE']
+# print("Authentication information loaded.")
+
+# LINE BREAK (USED FOR FORMATTING)
+line_space = " - "
+
+# TAGS - ARRAY
+tags = ['content-engagement', 'content-maintenance', 'content-health']
+# print("Tags array loaded.")
 
 # HEADERS
 headers = {
     'Authorization': 'Basic %s' % b64_token_user_name,
     'Content-Type': 'application/json-patch+json'
 }
+# print("Headers loaded.")
 
-# Open the JSON file
-with open("workitem.json", "r") as jsonFile:
-    # Load the JSON data from the file
-    data = json.load(jsonFile)
-    # print(data)
+def read_work_item_fields(file_name):
+    with open(file_name, "r") as jsonFile:
+        data = json.load(jsonFile)
+        # print("Work item fields read.")
+        return data
+        
 
-# WI TEMPLATE ITEMS - USING ENV VARIABLES
-titleTemplate = os.environ['TITLE_TEMPLATE']
-DescriptionTemplate = os.environ['DESCRIPTION_TEMPLATE']
-AreaPathTemplate = 'testProject\\ContentFreshness\\'
-IterationPath = 'testProject\\23-YEAR\\03-MAR'
-
-# TAGS - ARRAY
-tags = ['content-engagement', 'content-maintenance', 'content-health']
-
-# USER INPUT ABOUT HOW MANY WORK ITEMS TO CREATE
-user_input = input("How many work items would you like to create? ")
-
-# FOR LOOP: POPULATE A VARIABLE WITH THE WORK ITEM FIELDS
-for item in data[:int(user_input)]:
-    work_item_fields = [
-        # EACH ITEM REPRESENTS A CONFIGURABLE FIELD OF A WORKITEM - VALUE IS THE VALUE OF THE FIELD
-        {
-            "op": "add",
-            "path": "/fields/System.Title",
-            "from": None,
-            "value": titleTemplate+item["title"],
-        },
-        {
-            "op": "add",
-            "path": "/fields/System.Description",
-            "from": None,
-            "value": DescriptionTemplate + " " + item["description"],
-
-        },
-        {
-            "op": "add",
-            "path": "/fields/System.AreaPath",
-            "from": None,
-            "value": AreaPathTemplate,
-
-        },
-        {
-            "op": "add",
-            "path": "/fields/System.IterationPath",
-            "from": None,
-            "value": IterationPath,
-
-        },
-        {
-            "op": "add",
-            "path": "/fields/System.Tags",
-            "from": None,
-            "value": tags[0]+','+tags[1]+','+tags[2],
-
-        },
-        {
-            "op": "add",
-            "path": "/fields/System.AssignedTo",
-            "from": None,
-            "value": "OwenADacc@outlook.com"
-
-        }
-    ]
-
-    # POST REQUEST
+def create_work_item(url, headers, work_item_fields):
     response = requests.post(url, headers=headers, json=work_item_fields)
     print(response.status_code)
-    # print(response.json())
-
-    # RESPONSE - with verification
-    # Check if the request was successful
-    if response.status_code == 200:
+    if response.status_code == 200 or response.status_code == 201:
         print("SUCCESS")
-        # Get the URL to the created work item from the location header
-        # PUT THE JSON INFO INTO A STRING
         response = json.dumps(response.json())
-        # print(response)
-        # PARSE THE STRING
         response = json.loads(response)
-        # print(response)
-        # GET THE URL FROM THE RESPONSE
         work_item_url = response['url']
         print(work_item_url)
     else:
-        # Print the response status code and error message
         print("ERROR")
         print(response.status_code)
         print(response.text)
 
-# GET ALL WORK ITEMS
-# getResponse = requests.get(url, headers=headers)
-# print(getResponse.status_code)
-# print(getResponse.json())
-# GET A URL FOR A WORK ITEM
-# work_item_url = getResponse.headers['System.Id']
-# print(work_item_url)
+def get_csv_files():
+    # Get a list of all the csv files in the csv-output directory
+    return [f for f in os.listdir("csv-output") if f.endswith(".csv")]
+
+def read_csv_file(filename):
+    with open(filename, "r", encoding="utf-8-sig") as csv_file:
+        reader = csv.DictReader(csv_file)
+        field_names = reader.fieldnames
+        out = []
+        for row in reader:
+            formatted_row = {field: row[field] for field in field_names}
+            out.append(formatted_row)
+        return out
+
+def write_json_file(data, filename):
+    with open(filename, "w") as json_file:
+        json_file.write(json.dumps(data, indent=4))
+
+def convert_csv_to_json():
+    # Check if there is at least one csv file in the directory
+    csv_files = get_csv_files()
+    if len(csv_files) == 0:
+        print("No csv files found in csv-output directory")
+    else:
+        # Use the first csv file found in the directory
+        csv_filename = os.path.join("csv-output", csv_files[0])
+        json_filename = os.path.join("json-output", "workItem.json")
+        data = read_csv_file(csv_filename)
+        write_json_file(data, json_filename)
+
+        print("CSV file converted to JSON and saved to json-output directory.")
+
+def main():
+
+    # CONVERT CSV TO JSON
+    convert_csv_to_json()
+
+    # CONFIGURATION SECTION - READ FROM .ENV FILE:
+    type = typeTemplate
+    url = f'{organization_url}/{project}/_apis/wit/workitems/${type}?api-version=6.0'
+
+    # Open the JSON file
+    work_item_fields = read_work_item_fields("workItem.json")
+
+    # USER INPUT ABOUT HOW MANY WORK ITEMS TO CREATE
+    while True:
+        user_input = input("How many work items would you like to create (type 'ALL' for all work items)? ")
+        print("User input:", user_input)
+        if user_input.upper() == 'ALL':
+            user_input = len(work_item_fields)
+            break
+        else:
+            try:
+                user_input = int(user_input)
+                break
+            except ValueError:
+                print("Please type 'ALL' (ensure it is typed exactly as you see it).")
+
+    # FOR LOOP: POPULATE A VARIABLE WITH THE WORK ITEM FIELDS
+    for item in work_item_fields[:int(user_input)]:
+        items = [
+            # EACH ITEM REPRESENTS A CONFIGURABLE FIELD OF A WORKITEM - VALUE IS THE VALUE OF THE FIELD
+            {
+                "op": "add",
+                "path": "/fields/System.Title",
+                "from": None,
+                # CONFIGURE USING json-output/workItem.json,
+                "value": titleTemplate + item["FilePath"],
+            },
+            {
+                "op": "add",
+                "path": "/fields/System.Description",
+                "from": None,
+                # CONFIGURE USING json-output/workItem.json,
+                "value": descriptionTemplate + item["FilePath"] + line_space + descriptionTemplate2 + item["Context"]
+
+            },
+            {
+                "op": "add",
+                "path": "/fields/System.AreaPath",
+                "from": None,
+                "value": areaPathTemplate,
+
+            },
+            {
+                "op": "add",
+                "path": "/fields/System.IterationPath",
+                "from": None,
+                "value": iterationPathTemplate,
+
+            },
+            {
+                "op": "add",
+                "path": "/fields/System.Tags",
+                "from": None,
+                "value": tags[0]+','+tags[1]+','+tags[2],
+
+            },
+            {
+                "op": "add",
+                "path": "/fields/System.AssignedTo",
+                "from": None,
+                "value": userTemplate,
+            }
+       
+        ]
+        # POST REQUEST
+        create_work_item(url, headers, items)
+
+if __name__ == "__main__":
+    main()
