@@ -29,24 +29,24 @@ Here is an example of how you can use the Azure DevOps REST API and Python to cr
 
 1. Set the headers for the REST API request
 
-```python
-headers = {
+    ```python
+    headers = {
     'Content-Type': 'application/json',
     'Authorization': 'Basic ' + personal_access_token
-}
-```
+    }
+    ```
 
 1. Set the work item type and fields
 
-```python
-work_item_type = 'Task'
-work_item_fields = {
-    'System.Title': 'My Task',
-    'System.Description': 'This is a sample task',
-    'System.State': 'To Do',
-    'System.AssignedTo': 'Alice'
-}
-```
+    ```python
+    work_item_type = 'Task'
+    work_item_fields = {
+        'System.Title': 'My Task',
+        'System.Description': 'This is a sample task',
+        'System.State': 'To Do',
+        'System.AssignedTo': 'Alice'
+    }
+    ```
 
 1. Set the API endpoint for creating work items
 

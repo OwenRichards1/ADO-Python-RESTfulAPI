@@ -14,18 +14,18 @@ organization_url = os.environ['ORGANIZATION_URL']
 personal_access_token = os.environ['PERSONAL_ACCESS_TOKEN']
 # USER NAME - LOAD FROM .ENV FILE
 user_name = os.environ['USER_NAME']
+# PROJECT
+project = os.environ['PROJECT']
 # COMBINED_USER_NAME
-token_user_name = user_names + ':' + personal_access_token
+token_user_name = user_name + ':' + personal_access_token
 # ENCODING - UFT - 8
 b64_token_user_name = base64.b64encode(token_user_name.encode()).decode()
-# PROJECT
-project = 'testProject'
+
 # WORK ITEM
-work_item_type = 'Task'
+type = 'task'
 # URL
-url = f'{organization_url}/{project}/_apis/wit/workitems/${work_item_type}?api-version=6.0'
+url = f'{organization_url}/{project}/_apis/wit/workitems/${type}?api-version=6.0'
 # print(url)
-manualUrl = 'http://dev.azure.com/GTDtestDevOps/testProject/_apis/wit/workitems/$Task?api-version=6.0'
 
 # HEADERS
 headers = {
@@ -35,34 +35,73 @@ headers = {
 
 # Open the JSON file
 with open("workitem.json", "r") as jsonFile:
-
     # Load the JSON data from the file
     data = json.load(jsonFile)
     # print(data)
 
+# WI TEMPLATE ITEMS - USING ENV VARIABLES
+titleTemplate = os.environ['TITLE_TEMPLATE']
+DescriptionTemplate = os.environ['DESCRIPTION_TEMPLATE']
+AreaPathTemplate = 'testProject\\ContentFreshness\\'
+IterationPath = 'testProject\\23-YEAR\\03-MAR'
+
+# TAGS - ARRAY
+tags = ['content-engagement', 'content-maintenance', 'content-health']
+
+# USER INPUT ABOUT HOW MANY WORK ITEMS TO CREATE
+user_input = input("How many work items would you like to create? ")
+
 # FOR LOOP: POPULATE A VARIABLE WITH THE WORK ITEM FIELDS
-for item in data[:1]:
-
-    # SET VARIABLES FROM THE DATA
-    dataTitle = data[0]['title']
-    # print(dataTitle)
-
-    work_item_fields = {
-        'fields': {
-            # MANDATORY FIELDS
+for item in data[:int(user_input)]:
+    work_item_fields = [
+        # EACH ITEM REPRESENTS A CONFIGURABLE FIELD OF A WORKITEM - VALUE IS THE VALUE OF THE FIELD
+        {
             "op": "add",
             "path": "/fields/System.Title",
-            "from": "null",
-            "value": dataTitle
-            # CUSTOM FIELDS
+            "from": None,
+            "value": titleTemplate+item["title"],
+        },
+        {
+            "op": "add",
+            "path": "/fields/System.Description",
+            "from": None,
+            "value": DescriptionTemplate + " " + item["description"],
+
+        },
+        {
+            "op": "add",
+            "path": "/fields/System.AreaPath",
+            "from": None,
+            "value": AreaPathTemplate,
+
+        },
+        {
+            "op": "add",
+            "path": "/fields/System.IterationPath",
+            "from": None,
+            "value": IterationPath,
+
+        },
+        {
+            "op": "add",
+            "path": "/fields/System.Tags",
+            "from": None,
+            "value": tags[0]+','+tags[1]+','+tags[2],
+
+        },
+        {
+            "op": "add",
+            "path": "/fields/System.AssignedTo",
+            "from": None,
+            "value": "OwenADacc@outlook.com"
+
         }
-    }
-    # print(work_item_fields)
+    ]
 
     # POST REQUEST
-    response = requests.post(manualUrl, headers=headers, json=work_item_fields)
+    response = requests.post(url, headers=headers, json=work_item_fields)
     print(response.status_code)
-    print(response.json())
+    # print(response.json())
 
     # RESPONSE - with verification
     # Check if the request was successful
@@ -74,19 +113,10 @@ for item in data[:1]:
         # print(response)
         # PARSE THE STRING
         response = json.loads(response)
-        print(response)
+        # print(response)
         # GET THE URL FROM THE RESPONSE
         work_item_url = response['url']
         print(work_item_url)
-
-        # Send a GET request to retrieve information about the created work item
-        # response = requests.get(work_item_url, headers=headers)
-
-        # Print the response status code
-        # print(response.status_code)
-
-        # Print the work item information
-        # print(response.json())
     else:
         # Print the response status code and error message
         print("ERROR")
@@ -94,7 +124,7 @@ for item in data[:1]:
         print(response.text)
 
 # GET ALL WORK ITEMS
-# getResponse = requests.get(manualUrl, headers=headers)
+# getResponse = requests.get(url, headers=headers)
 # print(getResponse.status_code)
 # print(getResponse.json())
 # GET A URL FOR A WORK ITEM
