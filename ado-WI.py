@@ -125,19 +125,20 @@ def main():
     for item in work_item_fields[:int(user_input)]:
         items = [
             # EACH ITEM REPRESENTS A CONFIGURABLE FIELD OF A WORKITEM - VALUE IS THE VALUE OF THE FIELD
+            # CONFIGURE USING json-output/workItem.json, REPLACE "TAKE_FROM-JSON" WITH THE NAME OF THE FIELD IN THE JSON FILE
             {
                 "op": "add",
                 "path": "/fields/System.Title",
                 "from": None,
                 # CONFIGURE USING json-output/workItem.json,
-                "value": titleTemplate + item["FilePath"],
+                "value": titleTemplate + item["TAKE_FROM-JSON"],
             },
             {
                 "op": "add",
                 "path": "/fields/System.Description",
                 "from": None,
                 # CONFIGURE USING json-output/workItem.json,
-                "value": descriptionTemplate + item["FilePath"] + line_space + descriptionTemplate2 + item["Context"]
+                "value": descriptionTemplate + item["TAKE_FROM-JSON"] + line_space + descriptionTemplate2 + item["Context"]
 
             },
             {
