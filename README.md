@@ -19,15 +19,14 @@ The following Python packages installed:
 - os
 - dotenv
 - base64
-- csv (for CSV-JSON.py only)
-
+- csv
 To install the required packages, run the following command in your terminal/command prompt:
 
     ```bash
     pip install requests json os dotenv base64 csv
     ```
 
-A CSV file called **sampleInfo.csv** containing the data that you want to use to create the work items. The CSV file must be saved to /csv-output.
+A CSV file saved in /csv-input. It can be named anything but if more than one file exists - the scrip will not run. The script will also run the first file it finds in the directory.
 
 **NOTE:** each row in the CSV file will be converted into a JSON object
 

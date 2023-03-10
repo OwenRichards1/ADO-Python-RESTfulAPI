@@ -64,8 +64,8 @@ def create_work_item(url, headers, work_item_fields):
         print(response.text)
 
 def get_csv_files():
-    # Get a list of all the csv files in the csv-output directory
-    return [f for f in os.listdir("csv-output") if f.endswith(".csv")]
+    # Get a list of all the csv files in the csv-input directory
+    return [f for f in os.listdir("csv-input") if f.endswith(".csv")]
 
 def read_csv_file(filename):
     with open(filename, "r", encoding="utf-8-sig") as csv_file:
@@ -85,15 +85,16 @@ def convert_csv_to_json():
     # Check if there is at least one csv file in the directory
     csv_files = get_csv_files()
     if len(csv_files) == 0:
-        print("No csv files found in csv-output directory")
+        raise Exception("No csv files found in csv-input directory")
     else:
         # Use the first csv file found in the directory
-        csv_filename = os.path.join("csv-output", csv_files[0])
+        csv_filename = os.path.join("csv-input", csv_files[0])
         json_filename = os.path.join("json-output", "workItem.json")
         data = read_csv_file(csv_filename)
         write_json_file(data, json_filename)
 
         print("CSV file converted to JSON and saved to json-output directory.")
+
 
 def main():
 
@@ -131,14 +132,14 @@ def main():
                 "path": "/fields/System.Title",
                 "from": None,
                 # CONFIGURE USING json-output/workItem.json,
-                "value": titleTemplate + item["TAKE_FROM-JSON"],
+                "value": titleTemplate + item["FilePath"],
             },
             {
                 "op": "add",
                 "path": "/fields/System.Description",
                 "from": None,
                 # CONFIGURE USING json-output/workItem.json,
-                "value": descriptionTemplate + item["TAKE_FROM-JSON"] + line_space + descriptionTemplate2 + item["Context"]
+                "value": descriptionTemplate + item["Context"] + line_space + descriptionTemplate2 + item["Context"]
 
             },
             {
