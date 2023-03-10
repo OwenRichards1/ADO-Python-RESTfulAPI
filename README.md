@@ -27,7 +27,9 @@ To install the required packages, run the following command in your terminal/com
     pip install requests json os dotenv base64 csv
     ```
 
-A CSV file with the data that you want to use to create the work items. **NOTE:** each row in the CSV file will be converted into a JSON object
+A CSV file with the data that you want to use to create the work items. 
+
+**NOTE:** each row in the CSV file will be converted into a JSON object
 
 ## Running the scripts
 
@@ -64,7 +66,7 @@ This script will first convert a CSV file into a JSON file. The script reads dat
 - **sampleInfo.csv**
 - **workItem.json**
 
-The CSV file must be in the same directory as the script but can be named anything - the script will read the file automatically and overwrite any previous data.
+The CSV file must be in the same directory as the script and named **sampleInfo.csv**. The JSON file will be created in the same directory as the script and will be named **workItem.json**.
 
 The data is read from the CSV file and is appended to an array. The array is then written to the JSON file. The number of rows that are read from the CSV file can be are changed through user input - this is to ensure that the correct number of work items are created.
 
@@ -86,8 +88,6 @@ Here's an explanation of each item in the loop:
     - create_work_item(url, headers, items) - This line sends a POST request to create a new work item using the specified url, headers, and items.
 
 Make sure to modify the values of the fields in the items list according to your JSON file. You can refer to the json-output/workItem.json file to configure the value field.
-
-The script reads the data from a JSON file **workitem.json**, which must be in the same directory as the script. The data in the JSON file is used to populate the fields of the work item.
 
 The script uses the `requests` package to send a POST request to the API. The request is sent to the URL that was constructed earlier. The request is sent with the following parameters. One field represents a configurable parameter of a work item, to add more simple continue the patter but update System. to the field you want to add.
 
