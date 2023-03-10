@@ -34,7 +34,7 @@ A CSV file saved in /csv-input. It can be named anything but if more than one fi
 
 To use this script, you need to create and set the following variables in a .env file:
 
-    ```bash
+```bash
     # CONFIGURATION SECTION:
     PERSONAL_ACCESS_TOKEN = 'ENTER YOUR PAT HERE'
     
@@ -56,21 +56,15 @@ To use this script, you need to create and set the following variables in a .env
     # WORK ITEM LOCATION SECTION:
     AREA_PATH = 'ENTER AREA PATH HERE'
     ITERATION_PATH = 'ENTER ITERATION PATH HERE'
-    ```
+```
 
 ## **ADO-WI.py**
 
-This script will first convert a CSV file into a JSON file. The script reads data from a CSV file and converts the data into a correct format for JSON. The file that is required for the script to run is:
-
-- **sampleInfo.csv**
-
-The JSON file will be created in /json-output and will be named the following:
+This script will first convert a CSV file into a JSON file. The script reads data from a CSV file and converts the data into a correct format for JSON. The data is then written to a JSON file and will be created in /json-output named the following:
 
 - **workItem.json**.
 
 **NOTE:** The JSON file will be overwritten each time the script is run.
-
-The data is read from the CSV file and is appended to an array. The array is then written to the JSON file. The number of rows that are read from the CSV file can be are changed through user input - this is to ensure that the correct number of work items are created.
 
 This script will create a work item in Azure DevOps using the API. To access the API, the script uses a **personal access token (PAT)** and the organization URL. It also encodes the PAT using base64 encoding, which is a requirement for the API.
 
@@ -93,7 +87,7 @@ Make sure to modify the values of the fields in the items list according to your
 
 The script uses the `requests` package to send a POST request to the API. The request is sent to the URL that was constructed earlier. The request is sent with the following parameters. One field represents a configurable parameter of a work item, to add more simple continue the patter but update System. to the field you want to add.
 
-    ```python
+```python
     work_item_fields = {
         'fields': {
             "op": "add",
