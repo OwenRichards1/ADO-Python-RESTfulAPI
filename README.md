@@ -59,12 +59,12 @@ To use this script, you need to set the following variables in a .env file:
 
 ## **ADO-WI.py**
 
-This script will first convert a CSV file into a JSON file. The script reads data from a CSV file and converts the data into  a correct format for JSON. The two files that are required to run the script are:
+This script will first convert a CSV file into a JSON file. The script reads data from a CSV file and converts the data into a correct format for JSON. The two files that are required to run the script are:
 
 - **sampleInfo.csv**
 - **workItem.json**
 
-The CSV file must be in the same directory as the script but can be named anything, provided the name is changed in the script - the script will read the file automatically and overwrite any previous data.
+The CSV file must be in the same directory as the script but can be named anything - the script will read the file automatically and overwrite any previous data.
 
 The data is read from the CSV file and is appended to an array. The array is then written to the JSON file. The number of rows that are read from the CSV file can be are changed through user input - this is to ensure that the correct number of work items are created.
 
@@ -78,11 +78,11 @@ Before running the script, make sure to configure the for loop in *ado-WI.py* co
 
 Here's an explanation of each item in the loop:
 
-    - for item in work_item_fields[:int(user_input)]: - This line loops through the list of work item fields, up to the specified number of work items.
-    items - This variable is a list of dictionaries representing the configurable fields of a work item.
-    - op - This field specifies the operation to be performed on the field, in this case, adding a new field.
-    - path - This field specifies the path of the field to be added, such as /fields/System.Title.
-    - value - This field specifies the value of the field to be added, such as titleTemplate + item["FilePath"]. Make sure to configure the value using the json-output    workItem.json file.
+    -  `for item in work_item_fields[:int(user_input)] `: - This line loops through the list of work item fields, up to the specified number of work items.
+    - `items` - This variable is a list of dictionaries representing the configurable fields of a work item.
+    - `op` - This field specifies the operation to be performed on the field, in this case, adding a new field.
+    - `path` - This field specifies the path of the field to be added, such as /fields/System.Title.
+    - `value` - This field specifies the value of the field to be added, such as titleTemplate + item["FilePath"]. Make sure to refer to the values used in the **workitem.json** file.
     - create_work_item(url, headers, items) - This line sends a POST request to create a new work item using the specified url, headers, and items.
 
 Make sure to modify the values of the fields in the items list according to your JSON file. You can refer to the json-output/workItem.json file to configure the value field.
