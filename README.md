@@ -27,13 +27,13 @@ To install the required packages, run the following command in your terminal/com
     pip install requests json os dotenv base64 csv
     ```
 
-A CSV file with the data that you want to use to create the work items. 
+A CSV file called **sampleInfo.csv** containing the data that you want to use to create the work items. The CSV file must be saved to /csv-output.
 
 **NOTE:** each row in the CSV file will be converted into a JSON object
 
 ## Running the scripts
 
-To use this script, you need to set the following variables in a .env file:
+To use this script, you need to create and set the following variables in a .env file:
 
     ```bash
     # CONFIGURATION SECTION:
@@ -61,12 +61,15 @@ To use this script, you need to set the following variables in a .env file:
 
 ## **ADO-WI.py**
 
-This script will first convert a CSV file into a JSON file. The script reads data from a CSV file and converts the data into a correct format for JSON. The two files that are required to run the script are:
+This script will first convert a CSV file into a JSON file. The script reads data from a CSV file and converts the data into a correct format for JSON. The file that is required for the script to run is:
 
 - **sampleInfo.csv**
-- **workItem.json**
 
-The CSV file must be in the same directory as the script and named **sampleInfo.csv**. The JSON file will be created in the same directory as the script and will be named **workItem.json**.
+The JSON file will be created in /json-output and will be named the following:
+
+- **workItem.json**.
+
+**NOTE:** The JSON file will be overwritten each time the script is run.
 
 The data is read from the CSV file and is appended to an array. The array is then written to the JSON file. The number of rows that are read from the CSV file can be are changed through user input - this is to ensure that the correct number of work items are created.
 
@@ -80,12 +83,12 @@ Before running the script, make sure to configure the for loop in *ado-WI.py* co
 
 Here's an explanation of each item in the loop:
 
-    -  `for item in work_item_fields[:int(user_input)] `: - This line loops through the list of work item fields, up to the specified number of work items.
-    - `items` - This variable is a list of dictionaries representing the configurable fields of a work item.
-    - `op` - This field specifies the operation to be performed on the field, in this case, adding a new field.
-    - `path` - This field specifies the path of the field to be added, such as /fields/System.Title.
-    - `value` - This field specifies the value of the field to be added, such as titleTemplate + item["FilePath"]. Make sure to refer to the values used in the **workitem.json** file.
-    - create_work_item(url, headers, items) - This line sends a POST request to create a new work item using the specified url, headers, and items.
+- `for item in work_item_fields[:int(user_input)]`: - This line loops through the list of work item fields, up to the specified number of work items.
+- `items` - This variable is a list of dictionaries representing the configurable fields of a work item.
+- `op` - This field specifies the operation to be performed on the field, in this case, adding a new field.
+- `path` - This field specifies the path of the field to be added, such as /fields/System.Title.
+- `value` - This field specifies the value of the field to be added, such as titleTemplate + item["FilePath"]. Make sure to refer to the values used in the **workitem.json** file.
+- `create_work_item(url, headers, items)` - This line sends a POST request to create a new work item using the specified url, headers, and items.
 
 Make sure to modify the values of the fields in the items list according to your JSON file. You can refer to the json-output/workItem.json file to configure the value field.
 
