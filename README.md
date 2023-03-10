@@ -96,7 +96,7 @@ The script uses the `requests` package to send a POST request to the API. The re
             "value": dataTitle
         }
     }
-    ```
+```
 
 The response variable contains the response from the API. The response is then printed to the console. If a work item is successfully created, the status code will be 200 and will contain the ID of the work item.
 
