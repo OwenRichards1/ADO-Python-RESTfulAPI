@@ -21,7 +21,7 @@ b64_token_user_name = base64.b64encode(token_user_name.encode()).decode()
 # WI TEMPLATE ITEMS - USING ENV VARIABLES
 titleTemplate = os.environ['TITLE_TEMPLATE']
 descriptionTemplate = os.environ['DESCRIPTION_TEMPLATE']
-descriptionTemplate2 = os.environ['DESCRIPTION_TEMPLATE2']
+#descriptionTemplate2 = os.environ['DESCRIPTION_TEMPLATE2']
 areaPathTemplate = os.environ['AREA_PATH_TEMPLATE']
 iterationPathTemplate = os.environ['ITERATION_PATH_TEMPLATE']
 userTemplate = os.environ['USER_TEMPLATE']
@@ -32,7 +32,7 @@ typeTemplate = os.environ['WORK_ITEM_TYPE']
 line_space = " - "
 
 # TAGS - ARRAY
-tags = ['content-engagement', 'content-maintenance', 'content-health']
+tags = ['Azure AD PowerShell references', 'content-maintenance', 'content-health']
 # print("Tags array loaded.")
 
 # HEADERS
@@ -106,7 +106,7 @@ def main():
     url = f'{organization_url}/{project}/_apis/wit/workitems/${type}?api-version=6.0'
 
     # Open the JSON file
-    work_item_fields = read_work_item_fields("workItem.json")
+    work_item_fields = read_work_item_fields("json-output/workItem.json")
 
     # USER INPUT ABOUT HOW MANY WORK ITEMS TO CREATE
     while True:
@@ -139,7 +139,8 @@ def main():
                 "path": "/fields/System.Description",
                 "from": None,
                 # CONFIGURE USING json-output/workItem.json,
-                "value": descriptionTemplate + item["Context"] + line_space + descriptionTemplate2 + item["Context"]
+                #"value": descriptionTemplate + '\n\nMatch:' + item["Match"] + '\n\nContext:' + item["Context"],
+                "value": '<p>% s </p><p><b>Match:</b> % s </p><p><b>Context:</b> % s</p>'% (descriptionTemplate, item["Match"], item["Context"]), 
 
             },
             {
