@@ -106,7 +106,7 @@ def main():
     url = f'{organization_url}/{project}/_apis/wit/workitems/${type}?api-version=6.0'
 
     # Open the JSON file
-    work_item_fields = read_work_item_fields("workItem.json")
+    work_item_fields = read_work_item_fields("json-output/workItem.json")
 
     # USER INPUT ABOUT HOW MANY WORK ITEMS TO CREATE
     while True:
@@ -131,15 +131,15 @@ def main():
                 "op": "add",
                 "path": "/fields/System.Title",
                 "from": None,
-                # CONFIGURE USING json-output/workItem.json,
-                "value": titleTemplate + item["FilePath"],
+                # CONFIGURE USING json-output/workItem.json, CHANGE: TAKE_FROM-JSON TO THE NAME OF THE FIELD IN THE JSON FILE
+                "value": titleTemplate + item["NAME"]
             },
             {
                 "op": "add",
                 "path": "/fields/System.Description",
                 "from": None,
-                # CONFIGURE USING json-output/workItem.json,
-                "value": descriptionTemplate + item["Context"] + line_space + descriptionTemplate2 + item["Context"]
+                  # CONFIGURE USING json-output/workItem.json, CHANGE: TAKE_FROM-JSON TO THE NAME OF THE FIELD IN THE JSON FILE
+                "value": item["LINKS"]
 
             },
             {
