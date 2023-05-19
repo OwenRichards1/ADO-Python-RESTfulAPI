@@ -98,8 +98,12 @@ The script uses the `requests` package to send a POST request to the API. The re
     }
 ```
 
-The response variable contains the response from the API. The response is then printed to the console. If a work item is successfully created, the status code will be 200 and will contain the ID of the work item.
+### NOTE
+
+Please ignore the placeholder.txt files, it is only there to ensure the json-output folder is created when the script is run.
 
 ### Conclusion
+
+The response variable contains the response from the API. The response is then printed to the console. If a work item is successfully created, the status code will be 200 and will contain the ID of the work item.
 
 This project provides a basic example of how to use the Azure DevOps API to create a work item and how to convert a CSV file into a JSON file in Python. You can modify the scripts to meet your specific needs and requirements.
