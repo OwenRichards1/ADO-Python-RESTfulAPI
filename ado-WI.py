@@ -21,7 +21,7 @@ b64_token_user_name = base64.b64encode(token_user_name.encode()).decode()
 # WI TEMPLATE ITEMS - USING ENV VARIABLES
 titleTemplate = os.environ['TITLE_TEMPLATE']
 descriptionTemplate = os.environ['DESCRIPTION_TEMPLATE']
-descriptionTemplate2 = os.environ['DESCRIPTION_TEMPLATE2']
+#descriptionTemplate2 = os.environ['DESCRIPTION_TEMPLATE2']
 areaPathTemplate = os.environ['AREA_PATH_TEMPLATE']
 iterationPathTemplate = os.environ['ITERATION_PATH_TEMPLATE']
 userTemplate = os.environ['USER_TEMPLATE']
@@ -32,7 +32,7 @@ typeTemplate = os.environ['WORK_ITEM_TYPE']
 line_space = " - "
 
 # TAGS - ARRAY
-tags = ['content-engagement', 'content-maintenance', 'content-health']
+tags = ['Azure AD PowerShell references', 'content-maintenance', 'content-health']
 # print("Tags array loaded.")
 
 # HEADERS
