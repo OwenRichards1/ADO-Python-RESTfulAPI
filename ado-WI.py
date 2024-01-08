@@ -17,7 +17,6 @@ user_name = os.environ['USER_NAME']
 project = os.environ['PROJECT']
 token_user_name = user_name + ':' + personal_access_token
 b64_token_user_name = base64.b64encode(token_user_name.encode()).decode()
-# print("Authentication information loaded.")
 
 # WI TEMPLATE ITEMS - USING ENV VARIABLES
 titleTemplate = os.environ['TITLE_TEMPLATE']
@@ -26,15 +25,16 @@ descriptionTemplate = os.environ['DESCRIPTION_TEMPLATE']
 areaPathTemplate = os.environ['AREA_PATH_TEMPLATE']
 iterationPathTemplate = os.environ['ITERATION_PATH_TEMPLATE']
 userTemplate = os.environ['USER_TEMPLATE']
+userEmailTemplate = os.environ['USER_EMAIL_TEMPLATE']
 typeTemplate = os.environ['WORK_ITEM_TYPE']
-# print("Authentication information loaded.")
 
 # LINE BREAK (USED FOR FORMATTING)
 line_space = " - "
 
 # TAGS - ARRAY
-tags = ['AzureAD-PS-Migration']
-# print("Tags array loaded.")
+tags = ['test-tag']
+# tags = ['Azure AD PowerShell references', 'content-maintenance', 'content-health']
+# tags = ['AzureAD-PS-Migration']
 
 # HEADERS
 headers = {
@@ -74,16 +74,21 @@ def read_csv_file(filename):
         field_names = reader.fieldnames
         out = []
         for row in reader:
+            # Check if all values in the row are empty (blank)
+            if all(value == '' for value in row.values()):
+                # Skip empty lines
+                continue  
             formatted_row = {field: row[field] for field in field_names}
             out.append(formatted_row)
         return out
+
 
 def write_json_file(data, filename):
     with open(filename, "w") as json_file:
         json_file.write(json.dumps(data, indent=4))
 
-def get_groups(items):
-    return (items['FilePath'],items['ms.author'], items['Repo'])
+# def get_groups(items):
+#     return (items['FilePath'],items['ms.author'], items['Repo'])
 
 def convert_csv_to_json():
     # Check if there is at least one csv file in the directory
@@ -94,16 +99,16 @@ def convert_csv_to_json():
         # Use the first csv file found in the directory
         csv_filename = os.path.join("csv-input", csv_files[0])
         json_filename = os.path.join("json-output", "workItem.json")
-        grouped_json_filename = os.path.join("json-output", "grouped_workItem.json")
+        # grouped_json_filename = os.path.join("json-output", "grouped_workItem.json")
         data = read_csv_file(csv_filename)
-        grouped_items = itertools.groupby(data, get_groups)
+        # grouped_items = itertools.groupby(data, get_groups)
 
-        groups=[]
-        for  (file, author, repo), items in grouped_items:
-            groups.append({"FilePath": file, "ms.author": author, "Repo":repo, "items":list(items)})
+        # groups=[]
+        # for  (file, author, repo), items in grouped_items:
+        #     groups.append({"FilePath": file, "ms.author": author, "Repo":repo, "items":list(items)})
 
         write_json_file(data, json_filename)
-        write_json_file(groups, grouped_json_filename)
+        # write_json_file(groups, grouped_json_filename)
 
         print("CSV file converted to JSON and saved to json-output directory.")
 
@@ -113,14 +118,13 @@ def main():
     # CONVERT CSV TO JSON
     convert_csv_to_json()
    
-
     # CONFIGURATION SECTION - READ FROM .ENV FILE:
     type = typeTemplate
     url = f'{organization_url}/{project}/_apis/wit/workitems/${type}?api-version=6.0'
 
     # Open the JSON file
-    #work_item_fields = read_work_item_fields("json-output/workItem.json")
-    work_item_fields = read_work_item_fields("json-output/grouped_workItem.json")
+    work_item_fields = read_work_item_fields("json-output/workItem.json")
+    # work_item_fields = read_work_item_fields("json-output/grouped_workItem.json")
 
     # USER INPUT ABOUT HOW MANY WORK ITEMS TO CREATE
     while True:
@@ -139,41 +143,42 @@ def main():
 
     # FOR LOOP: POPULATE A VARIABLE WITH THE WORK ITEM FIELDS
     for item in work_item_fields[:int(user_input)]:
-        
-        description_items = []
-        work_item_header = '<p>% s </p><p><b>Repo:</b> % s </p><p><b>File path:</b> % s </p>'% (descriptionTemplate,item["Repo"],item["FilePath"])
-        description_items.append(work_item_header)
-     
-        for i in item["items"]:
-            description_item = '<p><b>Match:</b> % s </p><p><b>Context:</b> % s</p>'% ( i["Match"], i["Context"])
-            description_items.append(description_item)
-        description = '<br>'.join(description_items)
-        assigned_to ='% s@% s' % (item["ms.author"],"microsoft.com")
-       
+    
+        # description_items = []
+        # work_item_header = '<p>% s </p><p><b>Repo:</b> % s </p><p><b>File path:</b> % s </p>'% (descriptionTemplate,item["Repo"],item["FilePath"])
+        # description_items.append(work_item_header)
+
+        # for i in item["items"]:
+        #     description_item = '<p><b>Match:</b> % s </p><p><b>Context:</b> % s</p>'% ( i["Match"], i["Context"])
+        #     description_items.append(description_item)
+        # description = '<br>'.join(description_items)
+        # assigned_to ='% s@% s' % (item["ms.author"],"microsoft.com")
+
         items = [
             # EACH ITEM REPRESENTS A CONFIGURABLE FIELD OF A WORKITEM - VALUE IS THE VALUE OF THE FIELD
-            # CONFIGURE USING json-output/workItem.json, REPLACE "TAKE_FROM-JSON" WITH THE NAME OF THE FIELD IN THE JSON FILE
             {
                 "op": "add",
                 "path": "/fields/System.Title",
                 "from": None,
-                # CONFIGURE USING json-output/workItem.json,
-                "value": titleTemplate + item["FilePath"],
+                # CONFIGURE USING YOUR CSV COLUMN HEADERS
+                "value": titleTemplate + item["NAME"],
+                # "value": titleTemplate + item["FilePath"],
+
             },
             {
                 "op": "add",
                 "path": "/fields/System.Description",
                 "from": None,
-                "value": description
-                # CONFIGURE USING json-output/workItem.json,
+                # CONFIGURE USING YOUR CSV COLUMN HEADERS
+                "value": descriptionTemplate + item["HEALTHSCORE"] + item["LINKS"]
                 #"value": descriptionTemplate + '\n\nMatch:' + item["Match"] + '\n\nContext:' + item["Context"],
                 #"value": '<p>% s </p><p><b>Repo:</b> % s </p><p><b>Match:</b> % s </p><p><b>Context:</b> % s</p>'% (descriptionTemplate,item["Repo"], item["Match"], item["Context"]), 
-
             },
             {
                 "op": "add",
                 "path": "/fields/System.AreaPath",
                 "from": None,
+                # CONFIGURE USING YOUR CSV COLUMN HEADERS
                 "value": areaPathTemplate,
 
             },
@@ -181,6 +186,7 @@ def main():
                 "op": "add",
                 "path": "/fields/System.IterationPath",
                 "from": None,
+                # CONFIGURE USING YOUR CSV COLUMN HEADERS
                 "value": iterationPathTemplate,
 
             },
@@ -188,16 +194,26 @@ def main():
                 "op": "add",
                 "path": "/fields/System.Tags",
                 "from": None,
+                # CONFIGURE USING YOUR CSV COLUMN HEADERS
                 "value": tags[0],
             },
-            {
-                "op": "add",
-                "path": "/fields/System.AssignedTo",
-                "from": None,
-                "value": assigned_to,
-            }
-
-       
+            # CONFIGURE FURTHER FIELDS HERE - e.g.:
+            # {
+            #     "op": "add",
+            #     "path": "/fields/System.ENTER_FIELD_NAME_HERE",
+            #     "from": None,
+            #     # CONFIGURE USING YOUR CSV COLUMN HEADERS
+            #     "value": tags[0],
+            # },
+            # UNCOMMENT THE FOLLOWING SECTION TO ASSIGN WORK ITEMS TO A USER
+            # {
+            #     "op": "add",
+            #     "path": "/fields/System.AssignedTo",
+            #     "from": None,
+            #     # "value": userTemplate,
+            #     # "value": assigned_to,
+            #     "value": item["ALIAS"] + userEmailTemplate,
+            # }
         ]
         # POST REQUEST
         create_work_item(url, headers, items)
